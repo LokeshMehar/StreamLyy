@@ -1,0 +1,66 @@
+services:
+  lokeshm-app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      lokeshm-kafka:
+        condition: service_healthy
+      lokeshm-redis:
+        condition: service_healthy
+    networks:
+      - lokeshm-network
+  lokeshm-redis:
+    image: redis:7
+    command: redis-server --requirepass lokeshm-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "lokeshm-redis", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lokeshm-network
+  lokeshm-zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SESSION_TIMEOUT_MS: 30000
+    ports:
+      - "2181:2181"
+    healthcheck:
+      test: ["CMD", "bash", "-c", "echo 'ruok' | nc -w 2 localhost 2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lokeshm-network
+  lokeshm-kafka:
+    image: confluentinc/cp-kafka:7.3.0
+    depends_on:
+      lokeshm-zookeeper:
+        condition: service_healthy
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: lokeshm-zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://lokeshm-kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lokeshm-network
+networks:
+  lokeshm-network:
+    driver: bridge
