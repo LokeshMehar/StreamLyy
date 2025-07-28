@@ -1,52 +1,56 @@
-# 🔊 Scalable Chat Application
+# ⚡ StreamLy – Real-time Media Infrastructure & Communication Fabric
 
-A powerful, scalable chat application with real-time messaging, media sharing, and video calling capabilities. Built with performance and scalability in mind, leveraging technologies like **WebSockets**, **Mediasoup**, **Kafka**, **Redis**, and **AWS S3**.
+StreamLy is a **high-performance, scalable communication infrastructure** for powering **real-time messaging**, **group video conferencing**, and **media synchronization** at scale.
 
-## 🚀 Features
-
-- 🔁 Real-time messaging using WebSockets
-- 📞 One-to-one and group video calling using Mediasoup
-- 📷 Media sharing (images, videos, files)
-- ⚡ Scalable architecture with Apache Kafka for message brokering
-- 🧠 Redis for fast in-memory session and cache management
-- ☁️ AWS S3 for media storage
-- 👥 User authentication and authorization
-- 💾 PostgreSQL with Prisma ORM for structured data storage
-- 📦 Built with Node.js and TypeScript for type-safe backend development
+Inspired by production systems like **Slack**, **Discord**, and **Zoom**, it demonstrates deep integration of distributed technologies such as **Kafka**, **Mediasoup**, **Redis**, and **WebSockets** — packaged into a seamless user-facing experience.
 
 ---
 
-## 🧱 Tech Stack
+## 🚀 Key Capabilities
 
-| Category            | Technology         |
-|---------------------|--------------------|
-| Backend             | Node.js, TypeScript |
-| Database            | PostgreSQL + Prisma |
-| Real-time Messaging | WebSockets, Kafka   |
-| Caching / Sessions  | Redis              |
-| Video Calling       | Mediasoup          |
-| File Storage        | AWS S3             |
-| Authentication      | JWT / OAuth (optional) |
-| Dev Tools           | Docker, Postman    |
+- 🔁 **Real-time Event Layer**  
+  WebSocket-based message delivery pipeline backed by Kafka for resilience and high-throughput distribution.
+
+- 🎥 **Video Conferencing Engine**  
+  Mediasoup-powered SFU enables efficient, scalable multi-user WebRTC sessions with low latency and adaptive stream control.
+
+- 📎 **Secure Media Storage**  
+  AWS S3 integration with signed URL handling for secure file/media exchange and preview within conversations.
+
+- ⚙️ **Session + Presence Management**  
+  Redis provides fast, in-memory user session and connection tracking, powering dynamic UI feedback like online indicators and typing states.
+
+- 💬 **Messaging Delivery + Replay**  
+  Kafka ensures message durability, traceability, and ordered delivery with potential for analytics/logging via stream processing.
+
+- 🧠 **Structured Data Layer**  
+  PostgreSQL with Prisma ORM ensures normalized schema, referential integrity, and ease of evolution for relational data.
 
 ---
 
-## 📁 Project Setup
+## 🧱 Tech Stack Overview
 
-```
-# Clone the repository
-git clone https://github.com/Tiru-99/Tawk
-cd server
+| Category            | Technology                         |
+|---------------------|------------------------------------|
+| **Backend Runtime** | Node.js, TypeScript                |
+| **Database**        | PostgreSQL + Prisma ORM            |
+| **Real-time Comm.** | WebSockets + Apache Kafka          |
+| **Media Engine**    | Mediasoup (WebRTC SFU)             |
+| **Session Layer**   | Redis                              |
+| **File Storage**    | AWS S3 (signed upload/download)    |
+| **Authentication**  | JWT (optionally OAuth2 compatible) |
+| **DevOps**          | Docker, GitHub Actions, Postman    |
 
-# Install shared dependencies (if any)
-npm install
+---
 
-# Turn on the backend
-cd backend
-npm install
-npm run dev
+## 🧩 System Design Snapshot
 
-# Turn on the frontend (in a new terminal)
-cd ../frontend
-npm install
-npm run dev
+```mermaid
+graph LR
+A[Client App] --> B(WebSocket Gateway)
+B --> C(Kafka Broker)
+B --> D(Mediasoup SFU)
+B --> E(Redis Session Cache)
+C --> F(Message Service)
+F --> G(PostgreSQL DB)
+F --> H(AWS S3)
